@@ -1,11 +1,18 @@
 package model
 
-import "terminal-blog-api/config"
+import (
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"terminal-blog-api/config"
+)
 
 type Result struct {
-	cfg config.Config
+	db  *gorm.DB
+	err error
 }
 
 func InitDatabase(cfg config.Config) Result {
-	return Result{}
+	dsn := cfg.Dsn
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	return Result{db, err}
 }
